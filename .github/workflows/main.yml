@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: "🥶 Load & Cache Node Dependencies"
         run: |
-          yarn install --frozen-lockfile
+          yarn install --immutable-cache
       - name: "👁️ Run checks"
         run: |
           if [ "${{ matrix.check }}" == "lint" ]; then
