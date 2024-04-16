@@ -6,24 +6,52 @@ const API_URL = "https://pokeapi.co/api/v2";
 export const fetchPokemonCategories = async (): Promise<
   ApiListResponse<NamedApiResource>
 > => {
-  const { data } = await axios.get<ApiListResponse<NamedApiResource>>(
-    `${API_URL}/type`,
-  );
-  return data;
+  try {
+    const { data } = await axios.get<ApiListResponse<NamedApiResource>>(
+      `${API_URL}/type`,
+    );
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch categories", error);
+    throw error;
+  }
 };
 
 export const fetchPokemonsByCategory = async (
   categoryId: string,
+  searchQuery?: string,
 ): Promise<NamedApiResource[]> => {
-  const { data } = await axios.get(`${API_URL}/type/${categoryId}`);
-  return data.pokemon.map(
-    (poke: { pokemon: NamedApiResource }) => poke.pokemon,
-  );
+  try {
+    const { data } = await axios.get(`${API_URL}/type/${categoryId}`);
+    if (searchQuery) {
+      return data.pokemon
+        .map((poke: { pokemon: NamedApiResource }) => poke.pokemon)
+        .filter((pokemon: NamedApiResource) =>
+          pokemon.name.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
+    }
+    return data.pokemon.map(
+      (poke: { pokemon: NamedApiResource }) => poke.pokemon,
+    );
+  } catch (error) {
+    console.error(
+      `Failed to fetch pokemons for category ${categoryId} with query ${searchQuery}`,
+      error,
+    );
+    throw error;
+  }
 };
 
 export const fetchPokemonDetails = async (
   pokemonId: string,
 ): Promise<Pokemon> => {
-  const { data } = await axios.get<Pokemon>(`${API_URL}/pokemon/${pokemonId}`);
-  return data;
+  try {
+    const { data } = await axios.get<Pokemon>(
+      `${API_URL}/pokemon/${pokemonId}`,
+    );
+    return data;
+  } catch (error) {
+    console.error(`Failed to fetch details for pokemon ${pokemonId}`, error);
+    throw error;
+  }
 };
