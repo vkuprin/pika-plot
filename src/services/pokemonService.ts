@@ -26,7 +26,9 @@ export const fetchPokemonsByCategory = async (
 
     const pokemonEntries = response.data.pokemon || [];
 
-    let results = pokemonEntries.map((entry: any) => entry.pokemon);
+    let results = pokemonEntries.map(
+      (entry: { pokemon: Pokemon[] }) => entry.pokemon,
+    );
 
     if (searchQuery) {
       results = results.filter((pokemon: NamedApiResource) =>
