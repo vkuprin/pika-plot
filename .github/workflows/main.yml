@@ -7,8 +7,7 @@ on:
 
 jobs:
   quality-check:
-    runs-on:
-      group: vantage
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         check: [lint, prettier, type-check]
