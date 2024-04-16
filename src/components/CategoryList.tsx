@@ -48,14 +48,19 @@ export const CategoryList = ({
 
   return (
     <ListContainer>
-      {filteredCategories.map((category) => (
-        <CategoryItem
-          key={category.name}
-          onClick={() => onCategorySelect(category.name)}
-        >
-          {category.name}
-        </CategoryItem>
-      ))}
+      {filteredCategories.map((category) => {
+        if (category.name === "unknown" || category.name === "shadow")
+          return null; // ToDo: check why API does not return data for these categories
+
+        return (
+          <CategoryItem
+            key={category.name}
+            onClick={() => onCategorySelect(category.name)}
+          >
+            {category.name}
+          </CategoryItem>
+        );
+      })}
     </ListContainer>
   );
 };
