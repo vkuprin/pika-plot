@@ -1,4 +1,4 @@
-import React, {ReactElement, useState} from "react";
+import React, { ReactElement, useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import { fetchPokemonsByCategory } from "@/services/pokemonService";
@@ -20,16 +20,17 @@ const LoadingDiv = styled.div`
 `;
 
 interface PokemonListProps {
-    categoryId: string;
-    searchQuery: string;
+  categoryId: string;
+  searchQuery: string;
 }
 
-export const PokemonList = ({ categoryId, searchQuery }: PokemonListProps): ReactElement => {
-  const {
-    data: pokemons,
-    isLoading,
-  } = useQuery<NamedApiResource[]>(["pokemons", categoryId], () =>
-    fetchPokemonsByCategory(categoryId),
+export const PokemonList = ({
+  categoryId,
+  searchQuery,
+}: PokemonListProps): ReactElement => {
+  const { data: pokemons, isLoading } = useQuery<NamedApiResource[]>(
+    ["pokemons", categoryId],
+    () => fetchPokemonsByCategory(categoryId),
   );
 
   const [selectedPokemonId, setSelectedPokemonId] = useState<string | null>(

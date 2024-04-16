@@ -24,4 +24,3 @@ interface Stat {
   base_stat: number;
   stat: StatDetail;
 }
-

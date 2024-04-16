@@ -11,7 +11,7 @@ jobs:
       group: vantage
     strategy:
       matrix:
-        check: [ lint, prettier, type-check ]
+        check: [lint, prettier, type-check]
     steps:
       - uses: actions/checkout@v4
       - name: "🥶 Load & Cache Node Dependencies"
@@ -20,9 +20,9 @@ jobs:
       - name: "👁️ Run checks"
         run: |
           if [ "${{ matrix.check }}" == "lint" ]; then
-            npm run lint
+            yarn lint
           elif [ "${{ matrix.check }}" == "prettier" ]; then
             npx prettier . --check
           elif [ "${{ matrix.check }}" == "type-check" ]; then
-            npm run type-check
+            yarn type-check
           fi

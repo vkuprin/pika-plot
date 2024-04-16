@@ -1,4 +1,4 @@
-import React, {ReactElement} from "react";
+import React, { ReactElement } from "react";
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { fetchPokemonCategories } from "@/services/pokemonService";
@@ -20,9 +20,13 @@ interface CategoryListProps {
   searchQuery: string;
 }
 
-export const CategoryList = ({ onCategorySelect, searchQuery }: CategoryListProps): ReactElement => {
+export const CategoryList = ({
+  onCategorySelect,
+  searchQuery,
+}: CategoryListProps): ReactElement => {
   const { data, isLoading } = useQuery<ApiListResponse<NamedApiResource>>(
-      "categories", fetchPokemonCategories
+    "categories",
+    fetchPokemonCategories,
   );
 
   if (isLoading) return <div>Loading...</div>;

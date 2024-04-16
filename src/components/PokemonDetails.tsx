@@ -1,18 +1,20 @@
-import React, {ReactElement} from "react";
+import React, { ReactElement } from "react";
 import { useQuery } from "react-query";
 import dynamic from "next/dynamic";
 import { fetchPokemonDetails } from "@/services/pokemonService";
-import {ApexOptions} from "apexcharts";
+import { ApexOptions } from "apexcharts";
 
 const ReactApexCharts = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 interface PokemonDetailsProps {
-    pokemonId: string;
+  pokemonId: string;
 }
 
-export const PokemonDetails = ({ pokemonId }: PokemonDetailsProps): ReactElement => {
+export const PokemonDetails = ({
+  pokemonId,
+}: PokemonDetailsProps): ReactElement => {
   const { data: pokemon, isLoading } = useQuery(
     ["pokemonDetails", pokemonId],
     () => fetchPokemonDetails(pokemonId),

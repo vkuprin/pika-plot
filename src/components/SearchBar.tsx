@@ -1,4 +1,4 @@
-import React, {ReactElement} from "react";
+import React, { ReactElement } from "react";
 import styled from "styled-components";
 
 const Input = styled.input`
@@ -8,7 +8,7 @@ const Input = styled.input`
 `;
 
 interface SearchBarProps {
-    onSearch: (searchQuery: string) => void;
+  onSearch: (searchQuery: string) => void;
 }
 
 export const SearchBar = ({ onSearch }: SearchBarProps): ReactElement => (

@@ -1,4 +1,4 @@
-import React, {ReactElement, useState} from "react";
+import React, { ReactElement, useState } from "react";
 import styled from "styled-components";
 import { CategoryList } from "@/components/CategoryList";
 import { PokemonList } from "@/components/PokemonList";
