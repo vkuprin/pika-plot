@@ -1,9 +1,9 @@
-import React, { ReactElement, useState } from "react";
-import { useQuery } from "react-query";
+import React, { ReactElement } from "react";
+import { useInfiniteQuery } from "react-query";
 import styled from "styled-components";
 import { fetchPokemonsByCategory } from "@/services/pokemonService";
 import { PokemonDetails } from "@/components/PokemonDetails";
-import { NamedApiResource } from "@/types";
+import { NamedApiResource, ApiListResponse } from "@/types";
 
 const PokemonContainer = styled.div`
   display: flex;
@@ -50,17 +50,32 @@ export const PokemonList = ({
   categoryId,
   searchQuery,
 }: PokemonListProps): ReactElement => {
-  const { data: pokemons, isLoading } = useQuery<NamedApiResource[]>(
-    ["pokemons", categoryId],
-    () => fetchPokemonsByCategory(categoryId),
-  );
+  const [selectedPokemonId, setSelectedPokemonId] = React.useState<
+    string | null
+  >(null);
 
-  const [selectedPokemonId, setSelectedPokemonId] = useState<string | null>(
-    null,
-  );
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery<ApiListResponse<NamedApiResource>, Error>(
+      ["pokemons", categoryId],
+      ({ pageParam = 0 }) => fetchPokemonsByCategory(categoryId, pageParam),
+      {
+        getNextPageParam: (lastPage) => lastPage.next || undefined,
+      },
+    );
+
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const bottom =
+      event.currentTarget.scrollHeight - event.currentTarget.scrollTop <=
+      event.currentTarget.clientHeight + 10;
+    if (bottom && hasNextPage) {
+      fetchNextPage();
+    }
+  };
 
   if (isLoading) return <LoadingDiv>Loading...</LoadingDiv>;
-  if (!pokemons) return <div>No data available</div>;
+  if (!data) return <div>No data available</div>;
+
+  const pokemons = data.pages.flatMap((page) => page.results);
 
   const filteredPokemons = pokemons.filter((pokemon) =>
     pokemon.name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -68,7 +83,7 @@ export const PokemonList = ({
 
   return (
     <HomePageContainer>
-      <LeftColumn>
+      <LeftColumn onScroll={handleScroll}>
         {filteredPokemons.map((pokemon) => (
           <PokemonContainer
             key={pokemon.name}
@@ -77,6 +92,7 @@ export const PokemonList = ({
             {pokemon.name}
           </PokemonContainer>
         ))}
+        {isFetchingNextPage && <LoadingDiv>Loading more...</LoadingDiv>}
       </LeftColumn>
       <RightColumn>
         {selectedPokemonId && <PokemonDetails pokemonId={selectedPokemonId} />}

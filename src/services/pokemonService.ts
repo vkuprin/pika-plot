@@ -20,19 +20,26 @@ export const fetchPokemonCategories = async (): Promise<
 export const fetchPokemonsByCategory = async (
   categoryId: string,
   searchQuery?: string,
-): Promise<NamedApiResource[]> => {
+): Promise<ApiListResponse<NamedApiResource>> => {
   try {
-    const { data } = await axios.get(`${API_URL}/type/${categoryId}`);
+    const response = await axios.get(`${API_URL}/type/${categoryId}`);
+
+    const pokemonEntries = response.data.pokemon || [];
+
+    let results = pokemonEntries.map((entry: any) => entry.pokemon);
+
     if (searchQuery) {
-      return data.pokemon
-        .map((poke: { pokemon: NamedApiResource }) => poke.pokemon)
-        .filter((pokemon: NamedApiResource) =>
-          pokemon.name.toLowerCase().includes(searchQuery.toLowerCase()),
-        );
+      results = results.filter((pokemon: NamedApiResource) =>
+        pokemon.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
     }
-    return data.pokemon.map(
-      (poke: { pokemon: NamedApiResource }) => poke.pokemon,
-    );
+
+    return {
+      count: results.length,
+      next: null,
+      previous: null,
+      results: results,
+    };
   } catch (error) {
     console.error(
       `Failed to fetch pokemons for category ${categoryId} with query ${searchQuery}`,
