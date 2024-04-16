@@ -27,7 +27,7 @@ const Home = (): ReactElement => {
 
   return (
     <>
-      <SearchBar onSearch={setSearchQuery} />
+      {/* ToDo: implement search <SearchBar onSearch={setSearchQuery} />*/}
       <HomePageContainer>
         <LeftColumn>
           <CategoryList
