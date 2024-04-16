@@ -6,9 +6,19 @@ import { SearchBar } from "@/components/SearchBar";
 
 const HomePageContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
   margin-top: 20px;
+`;
+
+const LeftColumn = styled.div`
+  padding: 10px;
+`;
+
+export const RightColumn = styled.div`
+  flex: 1;
+  padding: 10px;
+  border-left: 1px solid #ccc;
 `;
 
 const Home = (): ReactElement => {
@@ -16,16 +26,25 @@ const Home = (): ReactElement => {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <HomePageContainer>
+    <>
       <SearchBar onSearch={setSearchQuery} />
-      <CategoryList
-        onCategorySelect={setSelectedCategory}
-        searchQuery={searchQuery}
-      />
-      {selectedCategory && (
-        <PokemonList categoryId={selectedCategory} searchQuery={searchQuery} />
-      )}
-    </HomePageContainer>
+      <HomePageContainer>
+        <LeftColumn>
+          <CategoryList
+            onCategorySelect={setSelectedCategory}
+            searchQuery={searchQuery}
+          />
+        </LeftColumn>
+        <RightColumn>
+          {selectedCategory && (
+            <PokemonList
+              categoryId={selectedCategory}
+              searchQuery={searchQuery}
+            />
+          )}
+        </RightColumn>
+      </HomePageContainer>
+    </>
   );
 };
 

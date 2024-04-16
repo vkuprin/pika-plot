@@ -6,8 +6,12 @@ import { PokemonDetails } from "@/components/PokemonDetails";
 import { NamedApiResource } from "@/types";
 
 const PokemonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 10px;
-  border-bottom: 1px solid #ccc;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 300px;
   cursor: pointer;
   &:hover {
     background-color: #f9f9f9;
@@ -17,6 +21,24 @@ const PokemonContainer = styled.div`
 const LoadingDiv = styled.div`
   text-align: center;
   padding: 20px;
+`;
+
+const HomePageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 20px;
+`;
+
+const LeftColumn = styled.div`
+  padding: 10px;
+  max-height: 700px;
+  overflow-y: auto;
+`;
+
+export const RightColumn = styled.div`
+  flex: 1;
+  padding: 10px;
 `;
 
 interface PokemonListProps {
@@ -45,16 +67,20 @@ export const PokemonList = ({
   );
 
   return (
-    <div>
-      {filteredPokemons.map((pokemon) => (
-        <PokemonContainer
-          key={pokemon.name}
-          onClick={() => setSelectedPokemonId(pokemon.name)}
-        >
-          {pokemon.name}
-        </PokemonContainer>
-      ))}
-      {selectedPokemonId && <PokemonDetails pokemonId={selectedPokemonId} />}
-    </div>
+    <HomePageContainer>
+      <LeftColumn>
+        {filteredPokemons.map((pokemon) => (
+          <PokemonContainer
+            key={pokemon.name}
+            onClick={() => setSelectedPokemonId(pokemon.name)}
+          >
+            {pokemon.name}
+          </PokemonContainer>
+        ))}
+      </LeftColumn>
+      <RightColumn>
+        {selectedPokemonId && <PokemonDetails pokemonId={selectedPokemonId} />}
+      </RightColumn>
+    </HomePageContainer>
   );
 };

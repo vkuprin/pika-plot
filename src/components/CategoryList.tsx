@@ -4,7 +4,17 @@ import { useQuery } from "react-query";
 import { fetchPokemonCategories } from "@/services/pokemonService";
 import { ApiListResponse, NamedApiResource } from "@/types";
 
-const ListContainer = styled.div``;
+export const ListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 300px;
+  max-height: 700px;
+  overflow-y: auto;
+`;
+
 const CategoryItem = styled.div`
   cursor: pointer;
   padding: 10px;
